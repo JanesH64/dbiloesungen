@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+    postgres:
+        image: postgres
+        environment:
+           - POSTGRES_USER=u
+           - POSTGRES_PASSWORD=p
+           - POSTGRES_DB=dbi
+        volumes:
+        - ./cap.init.sql:/docker-entrypoint-initdb.d/init.sql
+        ports:
+            - 5432:5432
+            
