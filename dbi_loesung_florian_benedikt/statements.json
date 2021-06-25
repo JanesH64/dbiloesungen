@@ -1,0 +1,14 @@
+[
+  {
+    "fast": "SELECT dbi.orders.cid, SUM(dbi.orders.qty + dbi.orders.dollars) FROM dbi.orders GROUP BY dbi.orders.cid;",
+    "slow": "SELECT dbi.customers.cid, SUM(dbi.orders.qty + dbi.orders.dollars) FROM dbi.customers RIGHT OUTER JOIN dbi.orders ON dbi.customers.cid = dbi.orders.cid CROSS JOIN dbi.products WHERE dbi.products.pid IN (SELECT pid FROM dbi.orders) AND dbi.orders.pid = dbi.products.pid GROUP BY dbi.customers.cid ;"
+  },
+  {
+    "fast": "SELECT * FROM dbi.customers INNER JOIN dbi.orders ON dbi.customers.cid = dbi.orders.cid INNER JOIN dbi.products ON dbi.orders.pid = dbi.products.pid;",
+    "slow": "SELECT * FROM dbi.customers INNER JOIN dbi.orders ON dbi.customers.cid = dbi.orders.cid CROSS JOIN dbi.products WHERE dbi.products.pid IN (SELECT pid FROM dbi.orders) AND dbi.orders.pid = dbi.products.pid;"
+  },
+  {
+    "fast": "SELECT * FROM dbi.customers;",
+    "slow": "SELECT DISTINCT dbi.customers.* FROM dbi.customers CROSS JOIN dbi.customers as irrelevant;"
+  }
+]
